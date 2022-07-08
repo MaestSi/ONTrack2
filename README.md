@@ -58,6 +58,8 @@ Other mandatory arguments which may be specified in the ONTrack2.conf file
 --fastq_files                                                         Path to fastq files, use wildcards to select multiple samples
 --results_dir                                                         Path to a folder where to store results
 --scripts_dir                                                         scripts_dir is the directory containing all scripts
+--subsampling_flag                                                    subsampling_flag = true if you want to perform reads subsampling to reduce running time
+--subsampled_reads                                                    subsampled_reads is the number of subsampled reads for each sample in case subsampling_flag = true
 --minQ                                                                min Q value for reads filtering
 --minLen                                                              min read length for reads filtering
 --maxLen                                                              max read length for reads filtering

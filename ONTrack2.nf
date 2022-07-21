@@ -27,7 +27,7 @@ def helpMessage() {
     --target_reads_consensus                                              target_reads_consensus defines the maximum number of reads used for consensus calling
     --target_reads_polishing                                              target_reads_polishing defines the maximum number of reads used for consensus polishing
     --clustering_id_threshold                                             identity threshold for clustering preliminary allele assembly
-    --plurality                                                           MAFFT plurality value: minimum fraction of aligned reads supporting a basis for including it in the preliminary consensus
+    --plurality                                                           cut-off for the number of positive matches in the multiple sequence alignment below which there is no consensus
     --fast_alignment_flag                                                 set fast_alignment_flag=1 if you want to perform fast multiple sequence alignment; otherwise set fast_alignment_flag=0
     --primers_length                                                      primers_length defines how many bases are trimmed from consensus sequences
     --medaka_model                                                        medaka model for consensus polishing

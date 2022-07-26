@@ -1,7 +1,7 @@
 # ONTrack2
 A Nextflow MinION-based pipeline for tracking species biodiversity
 
-**ONTrack2** is a [Nextflow](https://www.nextflow.io) implementation of [ONTrack](https://github.com/MaestSi/ONTrack) pipeline, a rapid and accurate MinION-based barcoding pipeline for tracking species biodiversity on site; starting from MinION sequence reads in fastq format. The ONTrack2 pipeline is able to provide accurate consensus sequences in ~10 minutes per sample on a standard laptop. Compared to the original version, polishing is now performed with Racon and Medaka.
+**ONTrack2** is a [Nextflow](https://www.nextflow.io) implementation of [ONTrack](https://github.com/MaestSi/ONTrack) pipeline, a rapid and accurate MinION-based barcoding pipeline for tracking species biodiversity on site; starting from MinION sequence reads in fastq format, the ONTrack2 pipeline is able to provide accurate consensus sequences in ~10 minutes per sample on a standard laptop. Compared to the original version, polishing is now performed with Racon and Medaka.
 
 <p align="center">
   <img src="Figures/ONTrack_logo.png" alt="drawing" width="550" title="ONTrack_logo">

@@ -168,7 +168,7 @@ process consensusPolishing {
     else
     """
         mkdir -p ${params.results_dir}/consensusPolishing
-        /opt/conda/envs/ONTrack2_env/bin/seqtk trimfq ${params.results_dir}/draftConsensusCalling/${sample}/${sample}_draft_consensus.fasta -b ${params.primers_length} -e ${params.primers_length}  > ${params.results_dir}/ConsensusPolishing/${sample}/${sample}_consensus.fasta 
+        /opt/conda/envs/ONTrack2_env/bin/seqtk trimfq ${params.results_dir}/draftConsensusCalling/${sample}/${sample}_draft_consensus.fasta -b ${params.primers_length} -e ${params.primers_length}  > ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta 
     """
 }
 
@@ -184,15 +184,15 @@ process blastSearch {
     """
         mkdir -p ${params.results_dir}/blastSearch/
         
-        cp ${params.results_dir}/ConsensusPolishing/${sample}/${sample}_consensus.fasta ${params.results_dir}/blastSearch/
-        /opt/conda/envs/ONTrack2_env/bin/blastn -num_threads ${task.cpus} -db ${params.blast_db} -query ${params.results_dir}/ConsensusPolishing/${sample}/${sample}_consensus.fasta > ${params.results_dir}/blastSearch/${sample}_blast_results.txt
+        cp ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta ${params.results_dir}/blastSearch/
+        /opt/conda/envs/ONTrack2_env/bin/blastn -num_threads ${task.cpus} -db ${params.blast_db} -query ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta > ${params.results_dir}/blastSearch/${sample}_blast_results.txt
         
     """
     else
     """
          mkdir -p ${params.results_dir}/blastSearch/
 
-         cp ${params.results_dir}/ConsensusPolishing/${sample}/${sample}_consensus.fasta ${params.results_dir}/blastSearch/
+         cp ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta ${params.results_dir}/blastSearch/
     """
 }
 

@@ -122,6 +122,8 @@ process readsClustering {
   """
   else
   """
+  mkdir -p ${params.results_dir}/readsClustering/${sample}
+  clustering_dir=${params.results_dir}/readsClustering/${sample}
   cp ${params.results_dir}/readsFiltering/${sample}.fastq \$clustering_dir/${sample}_decont.fastq
   cp ${params.results_dir}/readsFiltering/${sample}.fasta \$clustering_dir/${sample}_decont.fasta
 
@@ -168,6 +170,7 @@ process consensusPolishing {
     else
     """
         mkdir -p ${params.results_dir}/consensusPolishing
+        mkdir -p ${params.results_dir}/consensusPolishing/${sample}
         /opt/conda/envs/ONTrack2_env/bin/seqtk trimfq ${params.results_dir}/draftConsensusCalling/${sample}/${sample}_draft_consensus.fasta -b ${params.primers_length} -e ${params.primers_length}  > ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta 
     """
 }

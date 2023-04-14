@@ -75,6 +75,8 @@ Other mandatory arguments which may be specified in the ONTrack2.conf file
 
 ## Citation
 
+This pipeline was designed and implemented by Prof. Massimo Delledonne and Simone Maestri.
+
 If this tool is useful for your work, please consider citing our [manuscript](https://www.mdpi.com/2073-4425/10/6/468).
 
 Maestri S, Cosentino E, Paterno M, Freitag H, Garces JM, Marcolungo L, Alfano M, Njunjić I, Schilthuizen M, Slik F, Menegon M, Rossato M, Delledonne M. A Rapid and Accurate MinION-Based Workflow for Tracking Species Biodiversity in the Field. Genes. 2019; 10(6):468.

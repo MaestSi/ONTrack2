@@ -73,6 +73,8 @@ Other mandatory arguments which may be specified in the ONTrack2.conf file
 --blast_db                                                            path to Blast-indexed database for Blasting consensus sequences
 ```
 
+For running the analysis straight after live base-calling and demultiplexing in interactive mode, the helper script **Run_ONTrack2.R** is also available, which will perform concatenation of fastq files for each barcode, and run ONTrack2 pipeline on each file exploting Docker profile. The script should be executed with Rscript.
+
 ## Citation
 
 This pipeline was designed and implemented by Prof. Massimo Delledonne and Simone Maestri.

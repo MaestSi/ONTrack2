@@ -5,9 +5,9 @@ Run_ONTrack2 = function(demultiplexed_dir, blacklist_barcodes, ONTrack2_conf_fil
   demultiplexed_concatenated_dir <- paste0(gsub(x = demultiplexed_dir, pattern = "/$", replacement = ""), "_concatenated")
   dir.create(demultiplexed_concatenated_dir)
   cat("#!/bin/bash\nexport NXF_DEFAULT_DSL=1\n", file = paste0(demultiplexed_concatenated_dir, "/nextflowRun.sh"))
-  cat("source activate nextflow_env\n", file = paste0(demultiplexed_concatenated_dir, "/nextflowRun.sh"), append = TRUE)
+  #cat("source activate nextflow_env\n", file = paste0(demultiplexed_concatenated_dir, "/nextflowRun.sh"), append = TRUE)
   
-  barcodes_dirs <- grep(x = list.dirs(path = demultiplexed_dir, recursive = TRUE, full.names = TRUE), pattern = "barcode", value = TRUE)
+  barcodes_dirs <- grep(x = list.dirs(path = demultiplexed_dir, recursive = FALSE, full.names = TRUE), pattern = "barcode", value = TRUE)
 
   if (length(blacklist_barcodes) > 0) {
     blacklist_barcodes <- gsub(x = blacklist_barcodes, pattern = "\\s*", replacement = "")
@@ -17,7 +17,7 @@ Run_ONTrack2 = function(demultiplexed_dir, blacklist_barcodes, ONTrack2_conf_fil
   for (i in 1:length(barcodes_dirs)) {
     sample_curr <- basename(barcodes_dirs[i])
     cat(sprintf("Concatenating reads for sample %s\n", sample_curr))
-    fastq_files <- list.files(path = barcodes_dirs[i], pattern = "\\.fastq", full.names = TRUE)
+    fastq_files <- list.files(path = barcodes_dirs[i], pattern = "\\.fastq", full.names = TRUE, recursive = TRUE)
     system(paste0("zless ", paste0(fastq_files, collapse = " "), " > ", paste0(demultiplexed_concatenated_dir, "/", sample_curr, ".fastq")))
   }
   
@@ -37,8 +37,9 @@ Run_ONTrack2 = function(demultiplexed_dir, blacklist_barcodes, ONTrack2_conf_fil
 ###########
 
 cat(sprintf("Starting ONTrack2 preprocessing pipeline...\n"))
-cat("Is Docker Desktop running? (y/n)\n")
-ans <- readLines(con = "stdin", n = 1)
+#cat("Is Docker running? (y/n)\n")
+#ans <- readLines(con = "stdin", n = 1)
+ans <- "y"
 if (length(grep(pattern = "y", x = ans, ignore.case = "TRUE")) > 0) {
   demultiplexed_dir <- tk_choose.dir(caption = "Select the folder containing demultiplexed fastq files\n")
   cat("Enter a comma separated list of blacklisted samples (if any, otherwise press enter):\n")
@@ -47,5 +48,5 @@ if (length(grep(pattern = "y", x = ans, ignore.case = "TRUE")) > 0) {
   ONTrack2_nf_file <- tk_choose.files(caption = "Select ONTrack2.nf file\n", multi = FALSE, default = gsub(pattern = "\\.conf", replacement = ".nf", x = ONTrack2_conf_file))
   Run_ONTrack2(demultiplexed_dir = demultiplexed_dir, blacklist_barcodes = blacklist_barcodes, ONTrack2_conf_file = ONTrack2_conf_file, ONTrack2_nf_file = ONTrack2_nf_file)
 } else {
-  stop("Please start Docker Desktop and then rerun the script.\nExiting.")
+  stop("Please start Docker and then rerun the script.\nExiting.")
 }

@@ -15,7 +15,7 @@ A Nextflow MinION-based pipeline for tracking species biodiversity
 * [Docker](https://docs.docker.com/engine/install/) or [Singularity](https://sylabs.io/guides/3.0/user-guide/installation.html)
 * NCBI nt database (optional, in case you want to perform a local Blast analysis of your consensus sequences)
 
-For downloading the database (~210 GB):
+For downloading the database:
 
 ```
 mkdir NCBI_nt_db

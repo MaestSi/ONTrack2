@@ -50,11 +50,9 @@ Channel
 // readsFiltering
 process readsFiltering {
   input:
-    tuple val(sample), val(fastq) from inputFiles_readsFiltering
-  
+    tuple val(sample), val(fastq)
   output:
-    val(sample) into readsFiltering_readsClustering
-  
+    val sample
   script:
   if(params.readsFiltering)
   """
@@ -91,11 +89,9 @@ process readsFiltering {
 // readsClustering
 process readsClustering {
   input:
-    val(sample) from readsFiltering_readsClustering
-  
+    val sample
   output:
-    val(sample) into readsClustering_draftConsensusCalling
-  
+    val sample
   script:
   if(params.readsClustering)
   """
@@ -117,13 +113,9 @@ process readsClustering {
 
   /opt/conda/envs/ONTrack2_env/bin/seqtk subseq ${params.results_dir}/readsFiltering/${sample}.fasta \$clustering_dir/${sample}_ids_mac.txt > \$clustering_dir/${sample}_decont.fasta
   /opt/conda/envs/ONTrack2_env/bin/seqtk subseq ${params.results_dir}/readsFiltering/${sample}.fastq \$clustering_dir/${sample}_ids_mac.txt > ${params.results_dir}/readsClustering/${sample}/${sample}_decont.fastq
-
-
   """
   else
   """
-  mkdir -p ${params.results_dir}/readsClustering/${sample}
-  clustering_dir=${params.results_dir}/readsClustering/${sample}
   cp ${params.results_dir}/readsFiltering/${sample}.fastq \$clustering_dir/${sample}_decont.fastq
   cp ${params.results_dir}/readsFiltering/${sample}.fasta \$clustering_dir/${sample}_decont.fasta
 
@@ -132,18 +124,15 @@ process readsClustering {
 
 process draftConsensusCalling {
     input:
-        val(sample) from readsClustering_draftConsensusCalling
-
+      val sample
     output:
-        val(sample) into draftConsensusCalling_consensusPolishing        
-
+      val sample
     script:
     if(params.draftConsensusCalling)
     """
     mkdir -p ${params.results_dir}/draftConsensusCalling
     export PATH=\$PATH:/opt/conda/envs/ONTrack2_env/bin
-    /opt/conda/envs/ONTrack2_env/bin/Rscript ${params.scripts_dir}/Obtain_draft_consensus.R fastq_file=${params.results_dir}/readsClustering/${sample}/${sample}_decont.fastq TRC=${params.target_reads_consensus} PLUR=${params.plurality} num_threads=${task.cpus} fast_alignment_flag=${params.fast_alignment_flag}
-        
+    /opt/conda/envs/ONTrack2_env/bin/Rscript ${params.scripts_dir}/Obtain_draft_consensus.R fastq_file=${params.results_dir}/readsClustering/${sample}/${sample}_decont.fastq TRC=${params.target_reads_consensus} PLUR=${params.plurality} num_threads=${task.cpus} fast_alignment_flag=${params.fast_alignment_flag}    
     """
     else
     """
@@ -153,11 +142,9 @@ process draftConsensusCalling {
 
 process consensusPolishing {
     input:
-        val(sample) from draftConsensusCalling_consensusPolishing
-
+      val sample
     output:
-        val(sample) into consensusPolishing_blastSearch
-    
+      val sample
     script:
     if(params.consensusPolishing)
     """
@@ -165,23 +152,18 @@ process consensusPolishing {
         export PATH=\$PATH:/opt/conda/envs/ONTrack2_env/bin/
 
         /opt/conda/envs/ONTrack2_env/bin/Rscript ${params.scripts_dir}/Polish_consensus.R draft_consensus=${params.results_dir}/draftConsensusCalling/${sample}/${sample}_draft_consensus.fasta fastq_file=${params.results_dir}/readsClustering/${sample}/${sample}_decont.fastq  TRP=${params.target_reads_polishing} num_threads=${task.cpus} primers_length=${params.primers_length} medaka_model=${params.medaka_model}
-        
     """
     else
     """
         mkdir -p ${params.results_dir}/consensusPolishing
-        mkdir -p ${params.results_dir}/consensusPolishing/${sample}
         /opt/conda/envs/ONTrack2_env/bin/seqtk trimfq ${params.results_dir}/draftConsensusCalling/${sample}/${sample}_draft_consensus.fasta -b ${params.primers_length} -e ${params.primers_length}  > ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta 
     """
 }
 
 process blastSearch {
     input:
-          val(sample) from consensusPolishing_blastSearch
-
+      val sample
     output:
-        
-
     script:
     if(params.blastSearch)
     """
@@ -189,14 +171,18 @@ process blastSearch {
         
         cp ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta ${params.results_dir}/blastSearch/
         /opt/conda/envs/ONTrack2_env/bin/blastn -num_threads ${task.cpus} -db ${params.blast_db} -query ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta > ${params.results_dir}/blastSearch/${sample}_blast_results.txt
-        
     """
     else
     """
          mkdir -p ${params.results_dir}/blastSearch/
-
          cp ${params.results_dir}/consensusPolishing/${sample}/${sample}_consensus.fasta ${params.results_dir}/blastSearch/
     """
 }
 
-    
+workflow {
+   readsFiltering(inputFiles_readsFiltering)
+   readsClustering(readsFiltering.out)
+   draftConsensusCalling(readsClustering.out)
+   consensusPolishing(draftConsensusCalling.out)
+   blastSearch(consensusPolishing.out) 
+}

@@ -4,7 +4,7 @@ library("tcltk")
 Run_ONTrack2 = function(demultiplexed_dir, blacklist_barcodes, ONTrack2_conf_file, ONTrack2_nf_file) {
   demultiplexed_concatenated_dir <- paste0(gsub(x = demultiplexed_dir, pattern = "/$", replacement = ""), "_concatenated")
   dir.create(demultiplexed_concatenated_dir)
-  cat("#!/bin/bash\nexport NXF_DEFAULT_DSL=1\n", file = paste0(demultiplexed_concatenated_dir, "/nextflowRun.sh"))
+  cat("#!/bin/bash\n", file = paste0(demultiplexed_concatenated_dir, "/nextflowRun.sh"))
   #cat("source activate nextflow_env\n", file = paste0(demultiplexed_concatenated_dir, "/nextflowRun.sh"), append = TRUE)
   
   barcodes_dirs <- grep(x = list.dirs(path = demultiplexed_dir, recursive = FALSE, full.names = TRUE), pattern = "barcode", value = TRUE)

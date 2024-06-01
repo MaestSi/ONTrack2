@@ -26,7 +26,15 @@ RUN conda config --add channels bioconda && \
 conda config --add channels anaconda && \
 conda config --add channels r && \
 conda config --add channels conda-forge
-RUN conda create -n ONTrack2_env -c bioconda bioconductor-biostrings
-RUN conda install -n ONTrack2_env python blast emboss vsearch seqtk mafft minimap2 samtools=1.15 racon medaka  nanofilt
-
+RUN conda create -n ONTrack2_env -c bioconda python=3.10 r-base bioconductor-biostrings
+RUN /opt/conda/envs/ONTrack2_env/bin/python -m pip install nanofilt
+RUN /opt/conda/envs/ONTrack2_env/bin/python -m pip install medaka
+RUN conda install -n ONTrack2_env blast
+RUN conda install -n ONTrack2_env emboss
+RUN conda install -n ONTrack2_env vsearch
+RUN conda install -n ONTrack2_env seqtk
+RUN conda install -n ONTrack2_env mafft
+RUN conda install -n ONTrack2_env minimap2
+RUN conda install -n ONTrack2_env samtools
+RUN conda install -n ONTrack2_env racon
 WORKDIR /home/
